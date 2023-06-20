@@ -1,9 +1,9 @@
 ﻿
 namespace SudokuSolver.Repository.Entities
 {
-    public class Puzzle
+    public struct Puzzle
     {
-        public int[][] Board { get; private set; }
+        public int[][] Board { get; set; }
 
         public Puzzle(string puzzle)
         {
@@ -14,44 +14,67 @@ namespace SudokuSolver.Repository.Entities
 
             Board = new int[9][];
 
-            for (var i = 0 ; i < 9; i++)
+            for (var r = 0 ; r < 9; r++)
             {
-                Board[i] = new int[9];
-                for (var j = 0; j < 9; j++)
+                Board[r] = new int[9];
+                for (var c = 0; c < 9; c++)
                 {
-                    Board[i][j] = int.Parse(puzzle[..1]);
-                    puzzle = puzzle.Substring(1);
+                    Board[r][c] = int.Parse(puzzle[..1]);
+                    puzzle = puzzle[1..];
                 }
             }
         }
 
-        public override string ToString()
+        public readonly int GetValueCount(int value)
         {
-            string prettyBoard = "";
+            int[] range = Enumerable.Range(0, 10).ToArray();
+            var count = 0;
 
-            for (var i = 0; i < 9; i++)
-            {
-                if (i > 0 && i % 3 == 0)
-                {
-                    prettyBoard += "\n| - - - + - - - + - - - |";
-                }
-                prettyBoard += "\n| ";
-
-                for (var j = 0; j < 9; j++)
-                {
-                    if (j > 0 && j % 3 == 0)
-                    {
-                        prettyBoard += "| ";
-                    }
-                    prettyBoard += $"{Board[i][j]} ";
-                }
-
-                prettyBoard += "|";
+            if (!range.Contains(value)) {
+                throw new ArgumentOutOfRangeException();
             }
 
-            prettyBoard += "\n\n    1 2 3 4 5 6 7 8 9\n";
+            for (var r = 0; r < 9; r++)
+            {
+                for (var c = 0; c < 9; c++)
+                {
+                    if (Board[r][c] == value)
+                    {
+                        count++;
+                    }
+                }
+            }
 
-            return prettyBoard;
+            return count;
+        }
+
+        public override readonly string ToString()
+        {
+            string prettyPuzzle = "";
+
+            for (var r = 0; r < 9; r++)
+            {
+                if (r > 0 && r % 3 == 0)
+                {
+                    prettyPuzzle += "\n| - - - + - - - + - - - |";
+                }
+                prettyPuzzle += "\n| ";
+
+                for (var c = 0; c < 9; c++)
+                {
+                    if (c > 0 && c % 3 == 0)
+                    {
+                        prettyPuzzle += "| ";
+                    }
+                    prettyPuzzle += Board[r][c] == 0 ? "  " : $"{Board[r][c]} ";
+                }
+
+                prettyPuzzle += "|";
+            }
+
+            prettyPuzzle += "\n\n    1 2 3 4 5 6 7 8 9\n";
+
+            return prettyPuzzle;
         }
     }
 }
