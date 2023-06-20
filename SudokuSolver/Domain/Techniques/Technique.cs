@@ -18,7 +18,7 @@ namespace SudokuSolver.Domain.Techniques
             {
                 if (cell.Value.Possibilities.Count == 1)
                 {
-                    cell.Value.CurrentValue = cell.Value.Possibilities[0];
+                    cell.Value.CurrentValue = cell.Value.Possibilities.First();
                 }
             }
         }

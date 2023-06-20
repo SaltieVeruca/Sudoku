@@ -23,10 +23,10 @@ namespace SudokuSolver.Domain
             // While each iteration commits changes to the board, keep attempting to solve puzzle
             do
             {
-                Parallel.ForEach(techniques, (t) =>
+                foreach (var t in techniques)
                 {
                     t.ApplyTechnique(inProgressBoard);
-                });
+                };
                 summary.Iterations++;
             }
             while (inProgressBoard.CommitChanges() != 0);
@@ -48,7 +48,7 @@ namespace SudokuSolver.Domain
 
     internal class SolverSummary
     {
-        private string _summary => $"Started at: {StartTime}\nEnded at: {EndTime}\nDuration: {Duration}\nTechnique iterations: {Iterations}";
+        private string _summary => $"Started at: {StartTime}\nEnded at:   {EndTime}\nDuration:   {Duration}\nIterations: {Iterations}";
         internal DateTime StartTime { get; } = DateTime.Now;
 
         internal DateTime EndTime { get; set; }

@@ -16,7 +16,7 @@ namespace SudokuSolver.Domain.Models
             {
                 for (var c = 0; c < 9; c++)
                 {
-                    this[(r,c)] = new InProgressCell()
+                    this[(r, c)] = new InProgressCell()
                     {
                         CurrentValue = _puzzleState.Board[r][c]
                     };
