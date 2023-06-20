@@ -5,8 +5,8 @@ namespace SudokuSolver.Repository
 {
     public class PuzzlesRepository
     {
-        private string _filePath = $"{AppContext.BaseDirectory}Repository\\Data\\Puzzles.json";
-        private Puzzle[] _puzzles;
+        private readonly string _filePath = $"{AppContext.BaseDirectory}Repository\\Data\\Puzzles.json";
+        private readonly Puzzle[] _puzzles;
 
         public PuzzlesRepository()
         {
