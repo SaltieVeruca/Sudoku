@@ -13,7 +13,6 @@ namespace SudokuSolver.Domain.Techniques
                     if (unsolvedCell.Value.Possibilities.Contains(solvedCell.Value.CurrentValue))
                     {
                         unsolvedCell.Value.Possibilities.Remove(solvedCell.Value.CurrentValue);
-
                     }
                 }
             }

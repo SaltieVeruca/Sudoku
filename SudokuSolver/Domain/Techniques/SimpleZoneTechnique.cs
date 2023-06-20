@@ -12,7 +12,10 @@ namespace SudokuSolver.Domain.Techniques
             {
                 foreach (var solvedCell in board.GetZone(zones.GetZoneIdByCoordinate(unsolvedCell.Key.Row, unsolvedCell.Key.Column)).Where(c => c.Value.CurrentValue is not 0))
                 {
-                    unsolvedCell.Value.Possibilities.Remove(solvedCell.Value.CurrentValue);
+                    if (unsolvedCell.Value.Possibilities.Contains(solvedCell.Value.CurrentValue))
+                    {
+                        unsolvedCell.Value.Possibilities.Remove(solvedCell.Value.CurrentValue);
+                    }
                 }
             }
         }
