@@ -3,6 +3,17 @@
     public class InProgressCell
     {
         public int CurrentValue { get; set; }
-        public List<int> Possibilities { get; set; } = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
+        public List<int> Possibilities { get; set; } = new();
+
+        public bool IsCurrentValueImplicit()
+        {
+            if (Possibilities.Count == 1)
+            {
+                CurrentValue = Possibilities[0];
+                return true;
+            }
+            return false;
+        }
     }
 }

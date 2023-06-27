@@ -6,34 +6,50 @@ namespace SudokuSolver.Domain
 {
     public class PuzzleSolver
     {
+        private bool _isBoardValid;
+
         public Puzzle SolvePuzzle(Puzzle puzzleToSolve)
         {
+            _isBoardValid = true;
             SolverSummary summary = new();
-
             var inProgressBoard = new InProgressBoard(puzzleToSolve);
-
             List<Technique> techniques = new()
             {
                 new SimpleColumnTechnique(),
                 new SimpleRowTechnique(),
-                new SimpleZoneTechnique()
-
+                new SimpleZoneTechnique(),
+                new LastCellColumnTechnique(),
+                new LastCellRowTechnique(),
+                new LastCellZoneTechnique(),
+                new OnlyAvailableColumnTechnique(),
+                new OnlyAvailableRowTechnique(),
+                new IsolatedMatchesColumnTechnique(),
+                new IsolatedMatchesRowTechnique(),
+                new IsolatedMatchesZoneTechnique()
             };
 
             // While each iteration commits changes to the board, keep attempting to solve puzzle
+            int changes = 0;
             do
             {
                 foreach (var t in techniques)
                 {
                     t.ApplyTechnique(inProgressBoard);
                 };
+                changes = inProgressBoard.CommitChanges();
+                _isBoardValid = inProgressBoard.IsValid();
                 summary.Iterations++;
+                Console.WriteLine(inProgressBoard.GetPuzzleState());
             }
-            while (inProgressBoard.CommitChanges() != 0);
+            while (_isBoardValid && changes > 0 && !inProgressBoard.IsSolved());
 
             summary.EndTime = DateTime.Now;
 
-            if (inProgressBoard.Any(c => c.Value.CurrentValue == 0))
+            if (!_isBoardValid)
+            {
+                Console.WriteLine(summary.PuzzleInvalid);
+            }
+            else if (inProgressBoard.Any(c => c.Value.CurrentValue == 0))
             {
                 Console.WriteLine(summary.PuzzleUnsolved);
             }
@@ -48,7 +64,8 @@ namespace SudokuSolver.Domain
 
     internal class SolverSummary
     {
-        private string _summary => $"Started at: {StartTime}\nEnded at:   {EndTime}\nDuration:   {Duration}\nIterations: {Iterations}";
+        private string Summary => $"Started at: {StartTime}\nEnded at:   {EndTime}\nDuration:   {Duration}\nIterations: {Iterations}";
+
         internal DateTime StartTime { get; } = DateTime.Now;
 
         internal DateTime EndTime { get; set; }
@@ -57,8 +74,10 @@ namespace SudokuSolver.Domain
 
         internal int Iterations { get; set; }
 
-        internal string PuzzleSolved => $"Puzzle solved\n\n{_summary}";
+        internal string PuzzleSolved => $"Puzzle solved\n\n{Summary}";
 
-        internal string PuzzleUnsolved => $"Puzzle could not be solved\n\n{_summary}";
+        internal string PuzzleUnsolved => $"Puzzle could not be solved\n\n{Summary}";
+
+        internal string PuzzleInvalid => $"Puzzle could not be solved because one or more techniques were invalid\n\n{Summary}";
     }
 }

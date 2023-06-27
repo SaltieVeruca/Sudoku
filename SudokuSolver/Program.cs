@@ -7,7 +7,7 @@ var puzzleRepository = new PuzzlesRepository();
 
 Console.WriteLine("Sudoku");
 
-var puzzle = puzzleRepository.GetPuzzleByIndex(0);
+var puzzle = puzzleRepository.GetPuzzleByIndex(2);
 
 Console.WriteLine(puzzle);
 

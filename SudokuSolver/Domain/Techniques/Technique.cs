@@ -12,14 +12,11 @@ namespace SudokuSolver.Domain.Techniques
 
         internal abstract void DeducePossibilities(InProgressBoard board);
 
-        private static void SetSolvedCells(InProgressBoard board)
+        private void SetSolvedCells(InProgressBoard board)
         {
-            foreach (var cell in board)
+            foreach (var cell in board.GetUnsolvedCells())
             {
-                if (cell.Value.Possibilities.Count == 1)
-                {
-                    cell.Value.CurrentValue = cell.Value.Possibilities.First();
-                }
+                _ = cell.Value.IsCurrentValueImplicit();
             }
         }
     }
